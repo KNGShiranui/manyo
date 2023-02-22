@@ -263,7 +263,7 @@ DEPENDENCIES
   rexml
   rspec-rails
   sass-rails (>= 6)
-  selenium-webdriver (>= 4.0.0.rc1)
+  selenium-webdriver
   spring
   spring-commands-rspec
   turbolinks (~> 5)
@@ -276,4 +276,4 @@ RUBY VERSION
    ruby 3.0.1p64
 
 BUNDLED WITH
-   2.4.3
+   2.4.7
