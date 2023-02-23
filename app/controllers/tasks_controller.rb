@@ -1,7 +1,11 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[ show edit update destroy ]
+  # 以下の記述でソートを許可するカラム名を一覧で定義。
+  SORTABLE_FIELDS = %w[id title due_date created_at updated_at].freeze  
+
   def index
-    @tasks = Task.all
+    @tasks = Task.all.order(created_at: :desc)
+    @tasks = Task.all.order(due_date: :desc) if params[:sort_due_date]
   end
 
   def new
