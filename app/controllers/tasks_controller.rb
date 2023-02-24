@@ -1,16 +1,24 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[ show edit update destroy ]
   # 以下の記述でソートを許可するカラム名を一覧で定義。
-  SORTABLE_FIELDS = %w[id title due_date created_at updated_at].freeze  
+  SORTABLE_FIELDS = %w[id title due_date status created_at updated_at].freeze  
 
   def index
     @tasks = Task.all.order(created_at: :desc) 
     # @tasks = Task.all.order(created_at: :desc) if params[:sort_created_at]としない
     # 上記のようにすると、デフォルトページがどっちか指定できず、テストでエラーになる
     @tasks = Task.all.order(due_date: :desc) if params[:sort_due_date]
-    # @tasks = Task.all.where(name: )
-    # @tasks = Task.all.where(status: )
-    # order(due_date: :desc) if params[:sort_due_date]
+    if params[:task].present?
+      title = params[:task][:title]
+      status = params[:task][:status]
+      if title.present? && status.present?
+        @tasks = Task.search_title_status(title, status)
+      elsif title.present? 
+        @tasks = Task.search_title(title)
+      elsif status.present?
+        @tasks = Task.search_status(status)
+      end
+    end
   end
 
   def new
