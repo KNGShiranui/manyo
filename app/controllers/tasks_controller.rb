@@ -4,11 +4,11 @@ class TasksController < ApplicationController
   SORTABLE_FIELDS = %w[id title due_date status created_at updated_at].freeze  
 
   def index
-    @tasks = Task.all.order(created_at: :desc).page(params[:page])
+    @tasks = Task.all.order(created_at: :desc)
     # @tasks = Task.all.order(created_at: :desc) if params[:sort_created_at]としない
     # 上記のようにすると、デフォルトページがどっちか指定できず、テストでエラーになる
-    @tasks = Task.all.order(due_date: :desc).page(params[:page]) if params[:sort_due_date]
-    @tasks = Task.all.order(priority: :asc).page(params[:page]) if params[:sort_priority]
+    @tasks = Task.all.order(due_date: :desc) if params[:sort_due_date]
+    @tasks = Task.all.order(priority: :asc) if params[:sort_priority]
     if params[:task].present?
       title = params[:task][:title]
       status = params[:task][:status]
@@ -20,6 +20,7 @@ class TasksController < ApplicationController
         @tasks = Task.search_status(status)
       end
     end
+    @tasks = @tasks.page(params[:page])
   end
 
   def new

@@ -2,6 +2,7 @@
 <p id="notice"><%= notice %></p>
 <h2>タスク検索</h2>
 <%= form_with(scope: :task, url: tasks_path, method: :get, local: true) do |form| %>
+<%# これはtasks_path内の変数taskに関する検索ということ？ %>
 <%#  model: @taskをscope: :taskと書き直した。%>
   <%= form.label "タスク名" %>
   <%= form.text_field :title %>
