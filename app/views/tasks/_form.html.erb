@@ -27,11 +27,17 @@
   </div>
   
   <div class="field">
-    <%= form.label :タスクステータス %>
+    <%= form.label :ステータス %>
     <%= form.select :status, [["未着手", "未着手"], ["着手中", "着手中"], ["完了", "完了"]], include_blank: "選択して下さい" %>
   </div>
 
-  <div class="actions">
+  <div class="field">
+    <%= form.label :優先度 %>
+    <%= form.select :priority,  Task.priorities.keys, {prompt: "選択してください"}, class: "priority_select"  %>
+    <%# TODO:Task.priorities.keysの意味を理解すること→たぶん、モデルのpriorityから引っ張ってきてる %>
+  </div>
+  
+    <div class="actions">
     <%= form.submit %>
   </div>
 <% end %>

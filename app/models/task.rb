@@ -9,4 +9,7 @@ class Task < ApplicationRecord
   scope :search_title, -> (title){where('title LIKE ?', "%#{title}%")}
   scope :search_status, -> (status){where(status: status)}
   scope :search_title_status, -> (title, status){where('title LIKE ?',"%#{title}%").where(status: status)}
+  enum priority: { "高": 0, "中": 1, "低": 2 } 
+  #enumメソッドは、定義された属性に対して、文字列を指定することで、それに対応する整数値を返すメソッドを自動的に追加
+  # 例えば、"高" を指定すると、0 が返される。この属性を利用することで、優先度に関する処理を簡単に行うことができる。
 end

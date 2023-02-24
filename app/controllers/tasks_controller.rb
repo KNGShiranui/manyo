@@ -8,6 +8,7 @@ class TasksController < ApplicationController
     # @tasks = Task.all.order(created_at: :desc) if params[:sort_created_at]としない
     # 上記のようにすると、デフォルトページがどっちか指定できず、テストでエラーになる
     @tasks = Task.all.order(due_date: :desc) if params[:sort_due_date]
+    @tasks = Task.all.order(priority: :asc) if params[:sort_priority]
     if params[:task].present?
       title = params[:task][:title]
       status = params[:task][:status]
@@ -75,7 +76,9 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title, :content, :due_date, :status)
+    params.require(:task).permit(:title, :content, :due_date, :created_at, :sort_expired, :search, :status, :priority)
+    # params.require(:task).permit(:name, :description, :expiry_date, :created_at, :sort_expired, :search, :status, :priority, :page ).merge(priority: params[:task][:priority])
+    # という書き方もあるようだが、差異についてはいまいちよくわからない
   end
 
   def set_task
