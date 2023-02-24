@@ -8,6 +8,9 @@ class TasksController < ApplicationController
     # @tasks = Task.all.order(created_at: :desc) if params[:sort_created_at]としない
     # 上記のようにすると、デフォルトページがどっちか指定できず、テストでエラーになる
     @tasks = Task.all.order(due_date: :desc) if params[:sort_due_date]
+    # @tasks = Task.all.where(name: )
+    # @tasks = Task.all.where(status: )
+    # order(due_date: :desc) if params[:sort_due_date]
   end
 
   def new
@@ -64,7 +67,7 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title, :content, :due_date)
+    params.require(:task).permit(:title, :content, :due_date, :status)
   end
 
   def set_task
