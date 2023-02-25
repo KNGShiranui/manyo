@@ -1,4 +1,5 @@
 class Task < ApplicationRecord
+  belongs_to :user
   paginates_per 10
   validates :title, presence: true, length: { maximum: 80}
   validates :content, presence: true,  length: { maximum: 1000}
