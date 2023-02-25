@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[ show edit update destroy ]
   # 以下の記述でソートを許可するカラム名を一覧で定義。
-  SORTABLE_FIELDS = %w[id title due_date status created_at updated_at].freeze  
+  # SORTABLE_FIELDS = %w[id title due_date status created_at updated_at].freeze  
 
   def index
     @tasks = Task.all.order(created_at: :desc)
@@ -77,7 +77,7 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title, :content, :due_date, :created_at, :sort_expired, :search, :status, :priority)
+    params.require(:task).permit(:title, :content, :due_date, :sort_expired, :search, :status, :priority)
     # params.require(:task).permit(:name, :description, :expiry_date, :created_at, :sort_expired, :search, :status, :priority, :page ).merge(priority: params[:task][:priority])
     # という書き方もあるようだが、差異についてはいまいちよくわからない
   end
