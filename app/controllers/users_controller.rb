@@ -1,14 +1,16 @@
 class UsersController < ApplicationController
   skip_before_action :login_required, only: %i(new create)
-  before_action :set_user, only: %i(show edit update destroy)
-  before_action :ensure_correct_user, only: %i(show edit update destroy)
+  before_action :set_user, only: %i(edit update show destroy)
+  before_action :ensure_correct_user, only: %i(show)
   before_action :can_not_new, only: %i(new)
   
-  def index
-  end
   
   def new
-    @user = User.new
+    if logged_in?
+      redirect_to user_path(current_user)
+    else
+      @user = User.new
+    end
   end
   
   def create
@@ -28,7 +30,11 @@ class UsersController < ApplicationController
   end
 
   def show
-
+    if current_user == User.find(params[:id])
+      @user = User.find(params[:id])
+    else
+      redirect_to(tasks_path, danger:"権限がありません")
+    end
   end
 
   def edit
@@ -60,11 +66,13 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :admin)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 
   def ensure_correct_user
     @user = User.find_by(id: params[:id])
+    # if
+      # TODO:ここで条件分岐させて、まずアドミニか否かを判定か？
     if @user.id != current_user.id
       flash[:notice] = "権限がありません"
       redirect_to tasks_path
