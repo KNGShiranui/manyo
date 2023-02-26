@@ -8,6 +8,9 @@ class Task < ApplicationRecord
   # default_scope -> { order(created_at: :desc) }
   # ここに記載するとコントローラでの条件分岐より優先して適用される。
   # なので条件分岐が利かなくなるためコメントアウト
+  scope :sort_due_date, -> {order(due_date: :desc)}
+  scope :sort_priority, -> {order(priority: :desc)}
+  scope :latest, -> {order(created_at: :desc)}
   scope :search_title, -> (title){where('title LIKE ?', "%#{title}%")}
   scope :search_status, -> (status){where(status: status)}
   scope :search_title_status, -> (title, status){where('title LIKE ?',"%#{title}%").where(status: status)}

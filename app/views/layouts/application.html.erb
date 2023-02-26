@@ -10,6 +10,30 @@
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
+  <header class ="header">
+    <% flash.each do |key, value| %>
+      <%= content_tag(:div, value, class: "#{key}") %>
+    <% end %>
+
+    <button type="button" class="btn btn-primary">Task Manager</button>
+    
+    <% if logged_in? %>
+      <button type="button" class="btn btn-danger">
+        <%= link_to "Profile", user_path(current_user.id) %>
+      </button>
+      <button type="button" class="btn btn-warning">
+        <%= link_to "Logout", session_path(current_user.id), method: :delete %> 
+      </button>
+    <% else %>
+      <button type="button" class="btn btn-danger">
+        <%= link_to "Sign up", new_user_path %>
+      </button>
+      <button type="button" class="btn btn-warning">
+        <%= link_to "Login", new_session_path %>
+      </button>
+    <% end %>
+  </header>
+
   <body>
     <%= yield %>
   </body>
