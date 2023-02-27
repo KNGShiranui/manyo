@@ -6,7 +6,23 @@ class User < ApplicationRecord
   has_secure_password
   has_many :tasks, dependent: :destroy
   validates :password, length: { minimum: 6 }
-  # before_update :can_not_update_admin
-  # before_destroy :can_not_destroy_admin
+  before_update :can_not_update_administrator 
+  before_destroy :can_not_destroy_administrator
+
+  private
+    def can_not_destroy_administrator
+        @administrator = User.where(administrator: true)
+      if @administrator.count == 1 && self.administrator == true
+        throw :abort
+      end
+    end
+
+    def can_not_update_administrator
+        @administrator = User.where(administrator: true)
+      if @administrator.count == 1 && self.administrator == false
+        throw :abort
+      end
+    end
+
 end
 
