@@ -35,10 +35,17 @@ ja:
 
 ---
 ja:
+
   activerecord:
+    attributes:
+      user:
+        email: "メールアドレス"
+        password_confirmation: "確認用パスワード"
     errors:
       messages:
         record_invalid: 'バリデーションに失敗しました: %{errors}'
+        taken: "は既に使用されています"
+        confirmation: "が一致しません"
         restrict_dependent_destroy:
           has_one: "%{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"
