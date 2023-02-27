@@ -5,9 +5,7 @@
 <h3><%= @user.name %>のタスク</h3>
 
 <p>
-
-</p>
-
 <td><%= link_to 'プロフィール編集', edit_user_path if @user.id == current_user.id %></td>
-
-<%= link_to 'タスク一覧', tasks_path %>
+<td><%= link_to 'タスク一覧', tasks_path %></td>
+<td><%= link_to '管理者画面', administrator_users_path if @user.id   == current_user.id %></td>
+</p>

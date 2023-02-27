@@ -52,7 +52,7 @@ class Administrator::UsersController < ApplicationController
   def administrator
     if current_user.present?
       unless current_user.administrator?
-        redirect_to root_path, notice: "許可されていません"
+        redirect_to tasks_path, notice: "許可されていません"
       # 現在のユーザーのadministratorカラムがtrueかどうかを確認。
       end
     end
