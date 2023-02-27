@@ -29,6 +29,7 @@
 <table>
   <thead>
     <tr>
+      <h2><th><div class="col">作成者</div></th></h2>
       <h2><th><div class="col">タスク名</div></th></h2>
       <h2><th><div class="col">タスク内容</div></th></h2>
       <h2><th><div class="col">タスク期日</div></th></h2>
@@ -41,6 +42,7 @@
   <tbody>
     <% @tasks.each do |task| %>
       <tr class="task_row">  
+        <td><%= task.user.name %></td>
         <td><%= task.title %></td>
         <td><%= task.content %></td>
         <td><%= task.due_date %></td>
