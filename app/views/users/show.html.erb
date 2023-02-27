@@ -4,6 +4,34 @@
 <br>
 <h3><%= @user.name %>のタスク</h3>
 
+<table>
+  <thead>
+    <tr>
+      <h2><th><div class="col">タスク名</div></th></h2>
+      <h2><th><div class="col">タスク内容</div></th></h2>
+      <h2><th><div class="col">タスク期日</div></th></h2>
+      <h2><th><div class="col">ステータス</div></th></h2>
+      <h2><th><div class="col">優先度</div></th></h2>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @user.tasks.each do |task| %>
+      <tr class="task_row">  
+        <td><%= task.title %></td>
+        <td><%= task.content %></td>
+        <td><%= task.due_date %></td>
+        <td><%= task.status %></td>
+        <td><%= task.priority %></td>
+        <td><%= link_to '詳細', task_path(task) %></td>
+        <td><%= link_to '編集', edit_task_path(task) %></td>
+        <td><%= link_to '削除', task_path(task), method: :delete, data: { confirm: '本当に削除してよいですか' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
 <p>
 <td><%= link_to 'プロフィール編集', edit_user_path if @user.id == current_user.id %></td>
 <td><%= link_to 'タスク一覧', tasks_path %></td>
