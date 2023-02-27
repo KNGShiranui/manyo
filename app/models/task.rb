@@ -1,5 +1,7 @@
 class Task < ApplicationRecord
   belongs_to :user
+  has_many :labelings, dependent: :destroy
+  has_many :labels, through: :labelings, source: :label
   paginates_per 10
   validates :title, presence: true, length: { maximum: 80}
   validates :content, presence: true,  length: { maximum: 1000}
