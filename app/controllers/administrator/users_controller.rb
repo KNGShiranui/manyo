@@ -3,7 +3,8 @@ class Administrator::UsersController < ApplicationController
   before_action :set_user, only: %i(edit update show destroy)
   before_action :administrator
   def index
-    @users = User.all.order(created_at: :desc)
+    @users = User.all.includes(:tasks).order(created_at: :desc)
+    # n+1問題解消策
   end
 
   def new
