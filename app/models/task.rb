@@ -16,9 +16,9 @@ class Task < ApplicationRecord
   scope :search_title, -> (title){where('title LIKE ?', "%#{title}%")}
   scope :search_status, -> (status){where(status: status)}
   scope :search_title_status, -> (title, status){where('title LIKE ?',"%#{title}%").where(status: status)}
-  scope :search_label, -> (label_ids){ where(id: LabelTask.where(label_id: label_ids).pluck(:task_id))}
+  scope :search_label, -> (label_ids){ where(id: Labeling.where(label_id: label_ids).pluck(:task_id))}
   # タスクidが1のタスクに関連付けられたラベルのidを取得する例
-  # label_ids = LabelTask.where(task_id: 1).pluck(:label_id)
+  # label_ids = Labeling.where(task_id: 1).pluck(:label_id)
   # TODO:label_idがlabels_idのラベルに関連付けられたタスクのidを取得する例
   # TODO:task_ids = LabelTask.where(label_id: label_ids).pluck(:task_id)
   # 引数がlabel_ids。

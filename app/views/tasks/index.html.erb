@@ -10,6 +10,8 @@
   <%= form.text_field :title %>
   <%= form.label "ステータス" %>
   <%= form.select :status, ["未着手", "着手中", "完了"], include_blank: "選択して下さい" %>
+  <%= form.label "カテゴリ" %>
+  <%= form.collection_check_boxes(:label_ids, Label.all, :id, :name)  %>
   <%= form.submit '検索', id:'search_button' %>
   <%# id: 'search_button'は、submitメソッドによって生成される検索ボタンにid属性を設定するためのオプションです。 %>
   <%# この場合、id属性に'search_button'が設定され、検索ボタンに対してCSSスタイルシートやJavaScriptで特定の操作を行うことができます。 %>
