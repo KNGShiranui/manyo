@@ -25,6 +25,13 @@
   <%= @task.priority %>
 </p>
 
+<p>
+  <strong>カテゴリ:</strong>
+  <% @task.labels.each do |label| %>
+    <%= label.name %>
+  <% end %>
+</p>
+
 <%= link_to '編集', edit_task_path(@task) %> |
 <%= link_to '削除', task_path(@task), method: :delete, data: { confirm: '本当に削除してよいですか' } %> |
 <%= link_to '戻る', tasks_path %> |

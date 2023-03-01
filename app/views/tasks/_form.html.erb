@@ -35,9 +35,19 @@
     <%= form.label :優先度 %>
     <%= form.select :priority,  Task.priorities.keys, {prompt: "選択してください"}, class: "priority_select"  %>
     <%# TODO:Task.priorities.keysの意味を理解すること→たぶん、モデルのpriorityから引っ張ってきてる %>
+    <%#= form.select :label,  Task.priorities.keys, {prompt: "選択してください"}, class: "priority_select"  %>
   </div>
-  
-    <div class="actions">
+
+  <div class="field">
+    <%= form.label :ラベル %>
+    <br>
+    <%= form.collection_check_boxes(:label_ids, Label.all, :id, :name) %>
+    <%# 1TODO:ここ要注意！できたけどロジック理解甘い %>
+  </div>
+
+  <%#= f.check_box :label_ids, { multiple: true, checked: label[:checked], disabled: label[:disabled], include_hidden: false }, label[:id] %>
+
+  <div class="actions">
     <%= form.submit %>
   </div>
 <% end %>

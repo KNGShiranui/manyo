@@ -13,6 +13,7 @@ class TasksController < ApplicationController
     if params[:task].present?
       title = params[:task][:title]
       status = params[:task][:status]
+      label_ids = params[:task][:label_ids]
       if title.present? && status.present?
         @tasks = current_user.tasks.search_title_status(title, status)
         # @tasks = Task.search_title_status(title, status)
@@ -22,6 +23,10 @@ class TasksController < ApplicationController
       elsif status.present?
         @tasks = current_user.tasks.search_status(status)
         # @tasks = Task.search_status(status)
+      elsif label_ids.present?
+        @tasks = current_user.tasks.search_label(label_ids)
+        # elsif label_ids.present?
+        # @tasks = @tasks.joins(:labels).where(labels: { id: params[:label_id] })
       end
     end
     @tasks = @tasks.latest.page(params[:page])
@@ -82,7 +87,7 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title, :content, :due_date, :search, :status, :priority)
+    params.require(:task).permit(:title, :content, :due_date, :search, :status, :priority, { label_ids: [] })
     # params.require(:task).permit(:name, :description, :expiry_date, :created_at, :sort_expired, :search, :status, :priority, :page ).merge(priority: params[:task][:priority])
     # という書き方もあるようだが、差異についてはいまいちよくわからない
   end
