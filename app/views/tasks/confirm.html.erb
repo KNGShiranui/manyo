@@ -1,0 +1,32 @@
+<%# binding.pry %>
+<h3>以下の内容で、送信する。</h3>
+  <%= @task.title %>
+  <%= @task.content %>
+  <%= @task.due_date %>
+  <%= @task.status %>
+  <%= @task.priority %>
+  <%#= @task.labels.pluck(:name) ではだめだった。%>
+  <%= @task.labels.map do |label| 
+    label.name 
+  end %>
+  <%# binding.pry %>
+
+
+
+<%= form_with(model: @task, local: true, url: tasks_path) do |form| %>
+<%# model: @pictureとしているのは@pictureを使用するデータテーブル（pictureモデル）に関するviewやコントローラが示す %>
+<%# リダイレクトやURL先としてこのファイルを指定することが可能であると示しているのではないか？ %>
+  <%= form.hidden_field :title %>
+  <%= form.hidden_field :content %>
+  <%= form.hidden_field :due_date %>
+  <%= form.hidden_field :status %>
+  <%= form.hidden_field :priority %>
+  <% @task.labels.each do |label| %>
+    <%= form.hidden_field :labels, value: label.name %>
+  <% binding.pry %>
+  <% end %>
+  <%= form.submit  "投稿する" %>
+  <%= form.submit "戻る", name: 'back'  %>
+<% end %>
+
+<%= link_to '戻る', :back %>

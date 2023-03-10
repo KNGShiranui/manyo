@@ -1,4 +1,4 @@
-<%= form_with(model: task, local: true) do |form| %>
+<%= form_with(model: task, local: true, url: choose_new_or_edit) do |form| %>
   <% if task.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(task.errors.count, "error") %> タスクの保存に失敗しました:</h2>
@@ -42,7 +42,7 @@
     <%= form.label :ラベル %>
     <br>
     <%= form.collection_check_boxes(:label_ids, Label.all, :id, :name) %>
-    <%# 1TODO:ここ要注意！できたけどロジック理解甘い %>
+    <%# TODO:ここ要注意！できたけどロジック理解甘い %>
   </div>
 
   <%#= f.check_box :label_ids, { multiple: true, checked: label[:checked], disabled: label[:disabled], include_hidden: false }, label[:id] %>
