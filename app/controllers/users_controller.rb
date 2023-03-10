@@ -1,66 +1,52 @@
 class UsersController < ApplicationController
-  skip_before_action :login_required, only: %i(new create)
+  skip_before_action :authenticate_user!, only: %i(new create)
   before_action :set_user, only: %i(edit update show destroy)
   before_action :ensure_correct_user, only: %i(show)
-  before_action :can_not_new, only: %i(new)
-  
-  
+  before_action :current_user
+  # before_action :can_not_new, only: %i(new)
+
   def new
-    if logged_in?
-      redirect_to user_path(current_user)
-    else
-      @user = User.new
-    end
+    redirect_to user_path(current_user) if logged_in?
+    @user = User.new # 上記以外の場合はこっち
   end
   
   def create
     @user = User.new(user_params)
-    respond_to do |format|
-      if @user.save
-        session[:user_id] = @user.id  # TODO:これ必要なのかな？
-        # format.html { redirect_to user_path(session[:user_id]), notice: "ユーザー登録が完了しました" }
-        format.html { redirect_to user_path(@user.id), notice: "ユーザー登録が完了しました" }
-        # TODO:上の@user.idはsession[:user.id]にしないのか？
-        format.json { render :show, status: :created, location: @user }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    if @user.save
+      session[:user_id] = @user.id  # log_inメソッドでもいいかも？
+      redirect_to user_path(@user.id), notice: "ユーザー登録が完了しました" 
+      # redirect_to user_path(session[:user_id])でもOK
+    else
+      render :new, status: :unprocessable_entity 
     end
   end
 
   def show
-    if current_user == User.find(params[:id])
-      @user = User.find(params[:id])
-    else
-      redirect_to(tasks_path, danger:"権限がありません")
-    end
+    redirect_to(tasks_path, danger:"権限がありません") unless current_user == @user
+    # set_userで定義した@user = User.find(params[:id])のこと
+    # ログインしているユーザーが他のユーザーのページを表示しようとした場合、
+    # current_user != @user となり、redirect_to(tasks_path, danger:"権限がありません")
+    # によってタスク一覧ページにリダイレクトされます。
   end
 
   def edit
   end
   
   def update
-    respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to user_url(@user), notice: "ユーザー情報が更新されました。" }
-        format.json { render :show, status: :ok, location: @user }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    if @user.update(user_params)
+      redirect_to user_path(@user), notice: "ユーザー情報が更新されました。"
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @user.destroy
-    respond_to do |format|
-      format.html { redirect_to new_session_path, notice: "ユーザー情報が削除されました" }
-      format.json { head :no_content }
-    end
+    redirect_to new_session_path, notice: "ユーザー情報が削除されました"
   end
 
   private
+
   def set_user
     @user = User.find(params[:id])
   end
@@ -71,15 +57,13 @@ class UsersController < ApplicationController
 
   def ensure_correct_user
     @user = User.find_by(id: params[:id])
-    # if
-      # TODO:ここで条件分岐させて、まずアドミニか否かを判定か？
-    if @user.id != current_user.id
+    unless @user == current_user || current_user.administrator?
       flash[:notice] = "権限がありません"
       redirect_to tasks_path
     end
   end
 
-  def can_not_new
-    redirect_to tasks_path if current_user.present?
-  end
+  # def can_not_new
+  #   redirect_to tasks_path if logged_in?
+  # end
 end
